@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB RTC Tutorial</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="option">
+        <button onclick="startChannel();">
+            Start Channel
+        </button>
+        <button onclick="connect();">
+            Connect
+        </button>
+    </div>
+
+    <div id="info">
+        <hr>
+        <span>Information</span>
+        <br>
+        <label for="connect_status">Connection Status:</label>
+        <span id="connection_status"> Disconnected </span> <br>
+        <label for="icecandidate">SDP</label> <br>
+        <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
+    </div>
+
+    <div id="join_info" class="hidden">
+        <hr>
+        <span>Join Info</span>
+        <textarea name="offer" id="offer" cols="30" rows="10"></textarea>
+        <button onclick="joinChannel()"> Join </button>
+    </div>
+
+    <div id="start_info" class="hidden">
+        <hr>
+        <span>Start Info</span>
+        <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
+        <button onclick="start()">
+            Start
+        </button>
+    </div>
+
+    <div id="message">
+        <hr>
+        <span>Messages</span>
+        <ul id="msg_list"></ul>
+    </div>
+
+    <div id="sender">
+        <hr>
+        <span>Message Input</span>
+        <textarea name="msg_input" id="msg_input" cols="100" rows="5"></textarea>
+        <button id="msg_send" onclick="sendMessage()">Send Message</button>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
