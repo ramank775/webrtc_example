@@ -33,12 +33,22 @@ function setDataChannel() {
         console.log("Connection Closed", e);
         document.getElementById("connection_status").innerText = "Connection Closed";
     };
+    dc.onerror = e => {
+        error(e)
+        console.error("Data channel error", e);
+    }
 }
 
 function startChannel() {
     dc = rtcConnection.createDataChannel("Channel");
     setDataChannel();
-    rtcConnection.createOffer().then(offer => rtcConnection.setLocalDescription(offer)).then(e => console.log("set offer successfully", e));
+    rtcConnection.createOffer()
+        .then(offer => rtcConnection.setLocalDescription(offer))
+        .then(e => console.log("set offer successfully", e))
+        .catch(e => {
+            error(e);
+            console.error("Error while setting offer");
+        });
     document.getElementById("start_info").classList.remove('hidden');
     document.getElementById("join_info").classList.add('hidden');
 }
@@ -52,8 +62,20 @@ function start() {
 function joinChannel() {
     const offer_str = document.getElementById("offer").value;
     const offer = JSON.parse(offer_str);
-    rtcConnection.setRemoteDescription(offer).then(e => console.log("Offer set"));
-    rtcConnection.createAnswer().then(ans => rtcConnection.setLocalDescription(ans)).then(e => console.log("Answer created", e));
+    rtcConnection.setRemoteDescription(offer)
+        .then(e => console.log("Offer set"))
+        .catch(err =>{
+            error(err);
+            console.error("Error while setting offer", err);
+        });
+
+    rtcConnection.createAnswer()
+        .then(ans => rtcConnection.setLocalDescription(ans))
+        .then(e => console.log("Answer created", e))
+        .catch(err => {
+            console.error("Error occur while creating answer", err);
+            error(err);
+        });
 }
 
 function sendMessage() {
@@ -68,4 +90,12 @@ function sendMessage() {
 function connect() {
     document.getElementById("start_info").classList.add('hidden');
     document.getElementById("join_info").classList.remove('hidden');
+}
+
+function error(err) {
+    const error_msg = JSON.stringify(err);
+    document.getElementById('last_error').innerText = error_msg;
+    const li = document.createElement('li');
+    li.innerText = `${Date.now().toLocaleString()} ${error_msg}`;
+    document.getElementById('error_list').appendChild(li);
 }

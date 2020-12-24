@@ -10,6 +10,30 @@
             display: none;
         }
 
+        .info_container {
+            min-width: 200px;
+            width: 35%;
+            float: left;
+        }
+
+        .message_container {
+            min-width: 400px;
+            width: 60%;
+            float: left;
+        }
+
+        #message {
+            min-height: 40vh;
+        }
+
+        #msg_input {
+            width: 70%;
+        }
+
+        .error_container {
+            width: 100%;
+        }
+
         button {
             height: 30px;
         }
@@ -17,68 +41,95 @@
 </head>
 
 <body>
-    <div id="option">
-        <button onclick="startChannel();">
-            Start Channel
-        </button>
-        <button onclick="connect();">
-            Connect
-        </button>
+    <h2>P2P communication with webrtc</h2>
+    <div class="info_container">
+        <div id="option">
+            <button onclick="startChannel();">
+                Start Channel
+            </button>
+            <button onclick="connect();">
+                Connect
+            </button>
+        </div>
+
+        <div id="info">
+            <hr>
+            <span>Information</span>
+            <br>
+            <label for="connect_status">Connection Status:</label>
+            <span id="connection_status"> Disconnected </span> <br>
+            <span id="last_error"></span>
+            <button onclick="toggleErrorList()">Error List</button>
+            <br>
+            <hr>
+            <label for="icecandidate">SDP</label> <br>
+            <span>Share this SDP with your partner</span> <br>
+            <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
+            <button onclick="copyIceCandidate()">Copy</button>
+            <br>
+
+        </div>
+
+        <div id="join_info" class="hidden">
+            <hr>
+            <span>Join Info</span> <br>
+            <span>Enter the SDP (offer) of your partner</span>
+            <br>
+            <textarea name="offer" id="offer" cols="30" rows="10"></textarea>
+            <br>
+            <button onclick="joinChannel()"> Join </button>
+        </div>
+
+        <div id="start_info" class="hidden">
+            <hr>
+            <span>Start Info</span> <br>
+            <span>Enter the sdp (answer) of your partner</span>
+            <br>
+            <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
+            <br>
+            <button onclick="start()">
+                Start
+            </button>
+        </div>
     </div>
 
-    <div id="info">
-        <hr>
-        <span>Information</span>
-        <br>
-        <label for="connect_status">Connection Status:</label>
-        <span id="connection_status"> Disconnected </span> <br>
-        <hr>
-        <label for="icecandidate">SDP</label> <br>
-        <span>Share this SDP with your partner</span> <br>
-        <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
-        <br>
+    <div class="message_container">
+        <div id="message">
+            <hr>
+            <span>Messages</span>
+            <ul id="msg_list"></ul>
+        </div>
 
+        <div id="sender">
+            <hr>
+            <span>Message Input</span>
+            <br>
+            <span>
+                <textarea name="msg_input" id="msg_input" rows="5"></textarea>
+                <button id="msg_send" onclick="sendMessage()">Send Message</button>
+            </span>
+        </div>
     </div>
 
-    <div id="join_info" class="hidden">
-        <hr>
-        <span>Join Info</span> <br>
-        <span>Enter the SDP (offer) of your partner</span>
-        <br>
-        <textarea name="offer" id="offer" cols="30" rows="10"></textarea>
-        <br>
-        <button onclick="joinChannel()"> Join </button>
-    </div>
-
-    <div id="start_info" class="hidden">
-        <hr>
-        <span>Start Info</span> <br>
-        <span>Enter the sdp (answer) of your partner</span>
-        <br>
-        <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
-        <br>
-        <button onclick="start()">
-            Start
-        </button>
-    </div>
-
-    <div id="message">
-        <hr>
-        <span>Messages</span>
-        <ul id="msg_list"></ul>
-    </div>
-
-    <div id="sender">
-        <hr>
-        <span>Message Input</span>
-        <br>
-        <span>
-            <textarea name="msg_input" id="msg_input" cols="100" rows="5"></textarea>
-            <button id="msg_send" onclick="sendMessage()">Send Message</button>
-        </span>
+    <div id="error_space" class="error_container hidden">
+        <ul id="error_list"></ul>
     </div>
 
     <script src="main.js"></script>
+    <script>
+        function toggleErrorList() {
+            const errorListElement = document.getElementById("error_space");
+            const classes = errorListElement.classList;
+            const fn = classes.contains('hidden') ?
+                classes.remove : classes.add;
+            fn('hidden');
+        }
+        function copyIceCandidate() {
+            const element = document.getElementById("icecandidate");
+            element.select();
+            document.execCommand('copy', true);
+        }
+    </script>
 </body>
 
 </html>
