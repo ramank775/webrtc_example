@@ -1,4 +1,4 @@
-# webrtc_tutorial
+# Webrtc example
 Basic WebRTC Implementation 
 
 # Steps
