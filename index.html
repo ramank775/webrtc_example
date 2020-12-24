@@ -9,6 +9,10 @@
         .hidden {
             display: none;
         }
+
+        button {
+            height: 30px;
+        }
     </style>
 </head>
 
@@ -28,21 +32,31 @@
         <br>
         <label for="connect_status">Connection Status:</label>
         <span id="connection_status"> Disconnected </span> <br>
+        <hr>
         <label for="icecandidate">SDP</label> <br>
+        <span>Share this SDP with your partner</span> <br>
         <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
+        <br>
+
     </div>
 
     <div id="join_info" class="hidden">
         <hr>
-        <span>Join Info</span>
+        <span>Join Info</span> <br>
+        <span>Enter the SDP (offer) of your partner</span>
+        <br>
         <textarea name="offer" id="offer" cols="30" rows="10"></textarea>
+        <br>
         <button onclick="joinChannel()"> Join </button>
     </div>
 
     <div id="start_info" class="hidden">
         <hr>
-        <span>Start Info</span>
+        <span>Start Info</span> <br>
+        <span>Enter the sdp (answer) of your partner</span>
+        <br>
         <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
+        <br>
         <button onclick="start()">
             Start
         </button>
@@ -57,8 +71,11 @@
     <div id="sender">
         <hr>
         <span>Message Input</span>
-        <textarea name="msg_input" id="msg_input" cols="100" rows="5"></textarea>
-        <button id="msg_send" onclick="sendMessage()">Send Message</button>
+        <br>
+        <span>
+            <textarea name="msg_input" id="msg_input" cols="100" rows="5"></textarea>
+            <button id="msg_send" onclick="sendMessage()">Send Message</button>
+        </span>
     </div>
 
     <script src="main.js"></script>
