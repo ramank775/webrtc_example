@@ -6,20 +6,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WEB RTC Tutorial</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Style the body */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 10px;
+        }
+
+        /* Style the top navigation bar */
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        /* Style the navigation bar links */
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        /* Right-aligned link */
+        .navbar a.right {
+            float: right;
+        }
+
+        /* Change color on hover */
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Column container */
+        .row {
+            display: -ms-flexbox;
+            /* IE10 */
+            display: flex;
+            -ms-flex-wrap: wrap;
+            /* IE10 */
+            flex-wrap: wrap;
+        }
+
+        /* Create two unequal columns that sits next to each other */
+        /* Sidebar/left column */
+        .side {
+            -ms-flex: 30%;
+            /* IE10 */
+            flex: 30%;
+            background-color: #f1f1f1;
+            padding: 20px;
+        }
+
+        /* Main column */
+        .main {
+            -ms-flex: 70%;
+            /* IE10 */
+            flex: 70%;
+            background-color: white;
+            padding: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background: #ddd;
+        }
+
+        /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+        @media screen and (max-width: 700px) {
+            .row {
+                flex-direction: column;
+            }
+        }
+
+        /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+        @media screen and (max-width: 400px) {
+            .navbar a {
+                float: none;
+                width: 100%;
+            }
+        }
+
         .hidden {
             display: none;
-        }
-
-        .info_container {
-            min-width: 200px;
-            width: 35%;
-            float: left;
-        }
-
-        .message_container {
-            min-width: 400px;
-            width: 60%;
-            float: left;
         }
 
         #message {
@@ -34,11 +110,6 @@
             float: none;
         }
 
-        .main {
-            overflow: hidden;
-            width: 98vw;
-        }
-
         button {
             height: 30px;
         }
@@ -46,81 +117,133 @@
 </head>
 
 <body>
-    <h2>P2P communication with webrtc</h2>
-    <div class="main">
-        <div class="info_container">
-            <div id="option">
-                <button onclick="startChannel();">
-                    Start Channel
-                </button>
-                <button onclick="connect();">
-                    Connect
-                </button>
+    <h2>Peer 2 Peer Communication with webrtc</h2>
+    <div class="navbar">
+        <a href="#" onclick="navigate('home');">Home</a>
+        <a href="#" class="right" onclick="navigate('instruction')">Instruction</a>
+    </div>
+    <div class="home page">
+        <div class="row">
+            <div class="side">
+                <div id="option">
+                    <button id="btn_start_channel" onclick="startChannel();">
+                        Start Channel
+                    </button>
+                    <button id="btn_connect" onclick="connect();">
+                        Connect
+                    </button>
+                </div>
+
+                <div id="info">
+                    <hr>
+                    <span>Information</span>
+                    <br>
+                    <label for="connect_status">Connection Status:</label>
+                    <span id="connection_status"> Disconnected </span> <br>
+                    <span id="last_error"></span>
+                    <button onclick="toggleErrorList()">Error List</button>
+                    <br>
+                    <hr>
+                    <label for="icecandidate">SDP</label> <br>
+                    <span>Share this SDP with your partner</span> <br>
+                    <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
+                    <br>
+                    <button onclick="copyIceCandidate()">Copy</button>
+                    <br>
+
+                </div>
+
+                <div id="join_info" class="hidden">
+                    <hr>
+                    <span>Join Info</span> <br>
+                    <span>Enter the SDP (offer) of your partner</span>
+                    <br>
+                    <textarea name="offer" id="offer" cols="30" rows="10"></textarea>
+                    <br>
+                    <button onclick="joinChannel()"> Join </button>
+                </div>
+
+                <div id="start_info" class="hidden">
+                    <hr>
+                    <span>Start Info</span> <br>
+                    <span>Enter the sdp (answer) of your partner</span>
+                    <br>
+                    <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
+                    <br>
+                    <button onclick="start()">
+                        Start
+                    </button>
+                </div>
             </div>
 
-            <div id="info">
-                <hr>
-                <span>Information</span>
-                <br>
-                <label for="connect_status">Connection Status:</label>
-                <span id="connection_status"> Disconnected </span> <br>
-                <span id="last_error"></span>
-                <button onclick="toggleErrorList()">Error List</button>
-                <br>
-                <hr>
-                <label for="icecandidate">SDP</label> <br>
-                <span>Share this SDP with your partner</span> <br>
-                <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
-                <button onclick="copyIceCandidate()">Copy</button>
-                <br>
+            <div class="main">
+                <div id="message">
+                    <hr>
+                    <span>Messages</span>
+                    <ul id="msg_list"></ul>
+                </div>
 
-            </div>
-
-            <div id="join_info" class="hidden">
-                <hr>
-                <span>Join Info</span> <br>
-                <span>Enter the SDP (offer) of your partner</span>
-                <br>
-                <textarea name="offer" id="offer" cols="30" rows="10"></textarea>
-                <br>
-                <button onclick="joinChannel()"> Join </button>
-            </div>
-
-            <div id="start_info" class="hidden">
-                <hr>
-                <span>Start Info</span> <br>
-                <span>Enter the sdp (answer) of your partner</span>
-                <br>
-                <textarea name="answer" id="answer" cols="30" rows="10"></textarea>
-                <br>
-                <button onclick="start()">
-                    Start
-                </button>
-            </div>
-        </div>
-
-        <div class="message_container">
-            <div id="message">
-                <hr>
-                <span>Messages</span>
-                <ul id="msg_list"></ul>
-            </div>
-
-            <div id="sender">
-                <hr>
-                <span>Message Input</span>
-                <br>
-                <span>
-                    <textarea name="msg_input" id="msg_input" rows="5"></textarea>
-                    <button id="msg_send" onclick="sendMessage()">Send Message</button>
-                </span>
+                <div id="sender">
+                    <hr>
+                    <span>Message Input</span>
+                    <br>
+                    <span>
+                        <textarea name="msg_input" id="msg_input" rows="5"></textarea>
+                        <button id="msg_send" onclick="sendMessage()">Send Message</button>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-    <div id="error_space" class="error_container hidden">
-        <hr>
-        <span>Error</span> <br>
-        <ul id="error_list"></ul>
+
+    <div class="instruction page hidden">
+        <div>
+            <h2> Peer 2 Peer communication</h2>
+            <div>
+                <p>
+                    Basic WebRTC Implementation
+                </p>
+            </div>
+            <h3>Steps</h3>
+            <div>
+                <h4>Person A:</h4>
+                <ul>
+                    <li> Click on start channel </li>
+                    <li>Copy SDP and share with your partner Person B</li>
+                </ul>
+                <h4>Person B:</h4>
+                <ul>
+                    <li> Click on Connect</li>
+                    <li> Paste SDP from Person A in join info </li>
+                    <li> Click on join </li>
+                    <li> Copy SDP and share with your partner Person A </li>
+                </ul>
+                <h4> Person A: </h4>
+                <ul>
+                    <li> Paste SDP from Person B in start info </li>
+                    <li> Click on Start </li>
+                    <li> Check connection status. If it's connected </li>
+                    <li> Start Chatting 😁😁 </li>
+                </ul>
+                <br>
+                <p>
+                    Note: As Webrtc works Peer to Peer, it may fails depending on network configuration mainly if your
+                    Router is configured with Symmertic NAT.
+                </p>
+
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div id="error_space" class="error_container hidden">
+            <hr>
+            <span>Error</span> <br>
+            <ul id="error_list"></ul>
+        </div>
+        <div>
+            Checkout the code at github <a href="https://github.com/ramank775/webrtc_example"
+                target="_blank">ramank775/webrtc_example</a>
+        </div>
     </div>
 
     <script src="main.js"></script>
@@ -135,6 +258,19 @@
             const element = document.getElementById("icecandidate");
             element.select();
             document.execCommand('copy', true);
+        }
+        function navigate(path) {
+            const pages = document.getElementsByClassName('page') || [];
+            for (const page in pages) {
+                if (Object.hasOwnProperty.call(pages, page)) {
+                    const element = pages[page];
+                    element.classList.add('hidden');
+                }
+            }
+            const page = document.getElementsByClassName(path);
+            if (page[0]) {
+                page[0].classList.remove('hidden');
+            }
         }
     </script>
 </body>

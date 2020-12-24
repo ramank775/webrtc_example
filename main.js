@@ -51,6 +51,7 @@ function startChannel() {
         });
     document.getElementById("start_info").classList.remove('hidden');
     document.getElementById("join_info").classList.add('hidden');
+    document.getElementById('btn_connect').classList.add('hidden');
 }
 
 function start() {
@@ -90,6 +91,7 @@ function sendMessage() {
 function connect() {
     document.getElementById("start_info").classList.add('hidden');
     document.getElementById("join_info").classList.remove('hidden');
+    document.getElementById('btn_start_channel').classList.add('hidden');
 }
 
 function error(err) {
