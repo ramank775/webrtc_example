@@ -123,7 +123,7 @@
     <div class="navbar">
         <a href="#" onclick="navigate('home');">Home</a>
         <a href="#" class="right" onclick="toggleErrorList()">Event List</button>
-        <a href="#" class="right" onclick="navigate('instruction')">Instruction</a>
+            <a href="#" class="right" onclick="navigate('instruction')">Instruction</a>
     </div>
     <div class="home page">
         <div class="row">
@@ -144,7 +144,7 @@
                     <label for="connect_status">Connection Status:</label>
                     <span id="connection_status"> Disconnected </span> <br>
                     <span>Error: </span><span id="last_error"></span>
-                    
+
                     <br>
                     <hr>
                     <label for="icecandidate">SDP Gathering State:<span id="ic_gathering_state"></span></label> <br>
@@ -181,8 +181,8 @@
                 <h2>Video</h2>
                 <div class="camera_container">
                     <div class="camera_remote">
-                        <span>Remote</span> <br>
-                        <video id="received_video"  style="width: 300px; height: 300px;" autoplay></video>
+                        <span>Remote</span> <button onclick="enablePictureInPicture()">Picture in Picture</button> <br>
+                        <video id="received_video" style="width: 300px; height: 300px;" autoplay></video>
                     </div>
                     <div class="camera_local">
                         <span>You</span> <br>
@@ -207,7 +207,7 @@
                     </span>
                 </div>
             </div>
-           
+
         </div>
     </div>
 
@@ -288,6 +288,14 @@
             const page = document.getElementsByClassName(path);
             if (page[0]) {
                 page[0].classList.remove('hidden');
+            }
+        }
+        function enablePictureInPicture() {
+            if ('pictureInPictureEnabled' in document) {
+                const remote_video = document.getElementById('received_video');
+                remote_video.requestPictureInPicture();
+            }else {
+                alert("Browser doesn't support picture in picture");
             }
         }
     </script>
