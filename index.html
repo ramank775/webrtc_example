@@ -142,12 +142,11 @@
                     <br>
                     <label for="connect_status">Connection Status:</label>
                     <span id="connection_status"> Disconnected </span> <br>
-                    <span id="last_error"></span>
+                    <span>Error: </span><span id="last_error"></span>
                     <button onclick="toggleErrorList()">Event List</button>
                     <br>
                     <hr>
                     <label for="icecandidate">SDP Gathering State:<span id="ic_gathering_state"></span></label> <br>
-                    <span>Once SDP State is completed, share this SDP with your partner</span> <br>
                     <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
                     <br>
                     <button onclick="copyIceCandidate()">Copy</button>

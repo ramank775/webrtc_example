@@ -46,7 +46,7 @@ function setDataChannel() {
         logEvent("Data channel closed");
     };
     dc.onerror = e => {
-        logEvent(`Data channel error : ${e}`, true);
+        logEvent(`Data channel error : ${JSON.stringify(e)}`, true);
     }
 }
 
