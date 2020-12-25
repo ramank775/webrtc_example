@@ -8,6 +8,10 @@ const config = {
 const rtcConnection = new RTCPeerConnection(config);
 let dc;
 
+rtcConnection.ontrack = e => {
+    document.getElementById("received_video").srcObject = e.streams[0];
+}
+
 rtcConnection.onicecandidate = e => {
     logEvent(`New ice candiate found!! Reprinting sdp. ${JSON.stringify(rtcConnection.localDescription)}`);
     document.getElementById("icecandidate").innerText = JSON.stringify(rtcConnection.localDescription);
@@ -102,6 +106,38 @@ function connect() {
     document.getElementById('btn_start_channel').classList.add('hidden');
 }
 
+function setupVideoChat() {
+    const mediaConstraints = {
+        audio: true,
+        video: true
+    };
+    navigator.mediaDevices.getUserMedia(mediaConstraints)
+        .then(function (localStream) {
+            document.getElementById("local_video").srcObject = localStream;
+            localStream.getTracks().forEach(track => rtcConnection.addTrack(track, localStream));
+        })
+        .catch(handleGetUserMediaError);
+}
+
+function handleGetUserMediaError(err) {
+    switch(e.name) {
+      case "NotFoundError":
+        logEvent(`Unable to open your call because no camera and/or microphone were found: ${JSON.stringify(err)}`, true)
+        alert("Unable to open your call because no camera and/or microphone" +
+              "were found.");
+        break;
+      case "SecurityError":
+      case "PermissionDeniedError":
+        // Do nothing; this is the same as the user canceling the call.
+        logEvent(`User denied permission of camera and/or audio: ${JSON.stringify(err)}`, true);
+        break;
+      default:
+          logEvent(`Error opening your camera and/or microphone: ${err} `, true)
+        alert("Error opening your camera and/or microphone: " + e.message);
+        break;
+    }
+  }
+
 function logEvent(event, isError = false) {
     const event_msg = JSON.stringify(event);
     if (isError) {
@@ -117,3 +153,5 @@ function logEvent(event, isError = false) {
     document.getElementById('event_list').appendChild(li);
     isError ? console.error(li.innerText) : console.log(li.innerText);
 }
+
+setupVideoChat();

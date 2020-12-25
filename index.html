@@ -58,18 +58,18 @@
         /* Create two unequal columns that sits next to each other */
         /* Sidebar/left column */
         .side {
-            -ms-flex: 30%;
+            -ms-flex: 20%;
             /* IE10 */
-            flex: 30%;
+            flex: 20%;
             background-color: #f1f1f1;
             padding: 20px;
         }
 
         /* Main column */
         .main {
-            -ms-flex: 70%;
+            -ms-flex: 60%;
             /* IE10 */
-            flex: 70%;
+            flex: 60%;
             background-color: white;
             padding: 20px;
         }
@@ -177,7 +177,19 @@
                     </button>
                 </div>
             </div>
-
+            <div class="side">
+                <h2>Video</h2>
+                <div class="camera_container">
+                    <div class="camera_remote">
+                        <span>Remote</span> <br>
+                        <video id="received_video"  style="width: 300px;" autoplay></video>
+                    </div>
+                    <div class="camera_local">
+                        <span>You</span> <br>
+                        <video id="local_video" style="width: 300px;" autoplay muted></video>
+                    </div>
+                </div>
+            </div>
             <div class="main">
                 <div id="message">
                     <hr>
@@ -195,6 +207,7 @@
                     </span>
                 </div>
             </div>
+           
         </div>
     </div>
 
