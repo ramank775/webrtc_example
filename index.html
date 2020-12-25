@@ -143,11 +143,11 @@
                     <label for="connect_status">Connection Status:</label>
                     <span id="connection_status"> Disconnected </span> <br>
                     <span id="last_error"></span>
-                    <button onclick="toggleErrorList()">Error List</button>
+                    <button onclick="toggleErrorList()">Event List</button>
                     <br>
                     <hr>
-                    <label for="icecandidate">SDP</label> <br>
-                    <span>Share this SDP with your partner</span> <br>
+                    <label for="icecandidate">SDP State:<span id="ic_gathering_state"></span></label> <br>
+                    <span>Once SDPState is completed, share this SDP with your partner</span> <br>
                     <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
                     <br>
                     <button onclick="copyIceCandidate()">Copy</button>

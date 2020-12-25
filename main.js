@@ -13,6 +13,16 @@ rtcConnection.onicecandidate = e => {
     document.getElementById("icecandidate").innerText = JSON.stringify(rtcConnection.localDescription);
 };
 
+rtcConnection.onicegatheringstatechange = e => {
+    error(e);
+    document.getElementById("ic_gathering_state").innerText = rtcConnection.iceGatheringState.toString();
+}
+
+rtcConnection.oniceconnectionstatechange = e => {
+    error(e);
+    document.getElementById("connection_status").innerText = `Connection Open ${rtcConnection.iceConnectionState.toString()}`;
+}
+
 rtcConnection.ondatachannel = e => {
     dc = e.channel;
     setDataChannel();
@@ -65,7 +75,7 @@ function joinChannel() {
     const offer = JSON.parse(offer_str);
     rtcConnection.setRemoteDescription(offer)
         .then(e => console.log("Offer set"))
-        .catch(err =>{
+        .catch(err => {
             error(err);
             console.error("Error while setting offer", err);
         });
