@@ -146,8 +146,8 @@
                     <button onclick="toggleErrorList()">Event List</button>
                     <br>
                     <hr>
-                    <label for="icecandidate">SDP State:<span id="ic_gathering_state"></span></label> <br>
-                    <span>Once SDPState is completed, share this SDP with your partner</span> <br>
+                    <label for="icecandidate">SDP Gathering State:<span id="ic_gathering_state"></span></label> <br>
+                    <span>Once SDP State is completed, share this SDP with your partner</span> <br>
                     <textarea name="icecandidate" id="icecandidate" cols="30" rows="10" readonly></textarea>
                     <br>
                     <button onclick="copyIceCandidate()">Copy</button>
@@ -211,13 +211,15 @@
                 <h4>Person A:</h4>
                 <ul>
                     <li> Click on start channel </li>
-                    <li>Copy SDP and share with your partner Person B</li>
+                    <li> Wait for SDP Gathering state to change to completed. </li>
+                    <li> Copy SDP and share with your partner Person B </li>
                 </ul>
                 <h4>Person B:</h4>
                 <ul>
                     <li> Click on Connect</li>
                     <li> Paste SDP from Person A in join info </li>
                     <li> Click on join </li>
+                    <li> Wait for SDP Gathering state to change to completed. </li>
                     <li> Copy SDP and share with your partner Person A </li>
                 </ul>
                 <h4> Person A: </h4>

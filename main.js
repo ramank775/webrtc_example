@@ -19,7 +19,11 @@ rtcConnection.onicegatheringstatechange = e => {
 }
 
 rtcConnection.oniceconnectionstatechange = e => {
-    logEvent(`Connection state change to ${rtcConnection.iceConnectionState.toString()}`);
+    logEvent(`ICE Connection state change to ${rtcConnection.iceConnectionState.toString()}`);
+}
+
+rtcConnection.onconnectionstatechange = e => {
+    logEvent(`Connection state changes to ${rtcConnection.connectionState.toString()}`);
     document.getElementById("connection_status").innerText = `Connection ${rtcConnection.iceConnectionState.toString()}`;
 }
 
@@ -37,11 +41,9 @@ function setDataChannel() {
     };
     dc.onopen = e => {
         logEvent("Data channel open");
-        document.getElementById("connection_status").innerText = "Connection Open";
     };
     dc.onclose = e => {
         logEvent("Data channel closed");
-        document.getElementById("connection_status").innerText = "Connection Closed";
     };
     dc.onerror = e => {
         logEvent(`Data channel error : ${e}`, true);
