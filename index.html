@@ -236,12 +236,13 @@
             </div>
         </div>
     </div>
+    <div id="event_space" class="error_container hidden">
+        <hr>
+        <span>Error</span> <br>
+        <ul id="event_list"></ul>
+        <hr>
+    </div>
     <div class="footer">
-        <div id="error_space" class="error_container hidden">
-            <hr>
-            <span>Error</span> <br>
-            <ul id="error_list"></ul>
-        </div>
         <div>
             Checkout the code at github <a href="https://github.com/ramank775/webrtc_example"
                 target="_blank">ramank775/webrtc_example</a>
@@ -251,7 +252,7 @@
     <script src="main.js"></script>
     <script>
         function toggleErrorList() {
-            const errorListElement = document.getElementById("error_space");
+            const errorListElement = document.getElementById("event_space");
             const classes = errorListElement.classList;
             classes.contains('hidden') ?
                 classes.remove('hidden') : classes.add('hidden');

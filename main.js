@@ -9,18 +9,18 @@ const rtcConnection = new RTCPeerConnection(config);
 let dc;
 
 rtcConnection.onicecandidate = e => {
-    console.log("New ice candiate found!! Reprinting sdp", JSON.stringify(rtcConnection.localDescription))
+    logEvent(`New ice candiate found!! Reprinting sdp. ${JSON.stringify(rtcConnection.localDescription)}`);
     document.getElementById("icecandidate").innerText = JSON.stringify(rtcConnection.localDescription);
 };
 
 rtcConnection.onicegatheringstatechange = e => {
-    error(e);
+    logEvent(`ICE gathering state change to: ${rtcConnection.iceGatheringState.toString()}`);
     document.getElementById("ic_gathering_state").innerText = rtcConnection.iceGatheringState.toString();
 }
 
 rtcConnection.oniceconnectionstatechange = e => {
-    error(e);
-    document.getElementById("connection_status").innerText = `Connection Open ${rtcConnection.iceConnectionState.toString()}`;
+    logEvent(`Connection state change to ${rtcConnection.iceConnectionState.toString()}`);
+    document.getElementById("connection_status").innerText = `Connection ${rtcConnection.iceConnectionState.toString()}`;
 }
 
 rtcConnection.ondatachannel = e => {
@@ -30,22 +30,21 @@ rtcConnection.ondatachannel = e => {
 
 function setDataChannel() {
     dc.onmessage = e => {
-        console.log("New Message", e.data);
+        logEvent(`New Message: ${e.data}`);
         const li = document.createElement('li');
         li.innerText = `Remote: ${JSON.stringify(e.data)}`;
         document.getElementById("msg_list").appendChild(li);
     };
     dc.onopen = e => {
-        console.log("Connection Open", e);
+        logEvent("Data channel open");
         document.getElementById("connection_status").innerText = "Connection Open";
     };
     dc.onclose = e => {
-        console.log("Connection Closed", e);
+        logEvent("Data channel closed");
         document.getElementById("connection_status").innerText = "Connection Closed";
     };
     dc.onerror = e => {
-        error(e)
-        console.error("Data channel error", e);
+        logEvent(`Data channel error : ${e}`, true);
     }
 }
 
@@ -54,10 +53,9 @@ function startChannel() {
     setDataChannel();
     rtcConnection.createOffer()
         .then(offer => rtcConnection.setLocalDescription(offer))
-        .then(e => console.log("set offer successfully", e))
+        .then(e => logEvent(`Offer successfully:  ${JSON.stringify(e)}`))
         .catch(e => {
-            error(e);
-            console.error("Error while setting offer");
+            logEvent(`Error while creating/setting offer: ${JSON.stringify(e)}`, true);
         });
     document.getElementById("start_info").classList.remove('hidden');
     document.getElementById("join_info").classList.add('hidden');
@@ -74,18 +72,16 @@ function joinChannel() {
     const offer_str = document.getElementById("offer").value;
     const offer = JSON.parse(offer_str);
     rtcConnection.setRemoteDescription(offer)
-        .then(e => console.log("Offer set"))
+        .then(e => logEvent(`Remote offer set: ${JSON.stringify(e)}`))
         .catch(err => {
-            error(err);
-            console.error("Error while setting offer", err);
+            logEvent(`Error while setting remote offer: ${err}`, true);
         });
 
     rtcConnection.createAnswer()
         .then(ans => rtcConnection.setLocalDescription(ans))
-        .then(e => console.log("Answer created", e))
+        .then(e => logEvent(`Answer created successfully ${JSON.stringify(e)}`))
         .catch(err => {
-            console.error("Error occur while creating answer", err);
-            error(err);
+            logEvent(`Error occur while creating answer:, ${err}`, true);
         });
 }
 
@@ -104,10 +100,18 @@ function connect() {
     document.getElementById('btn_start_channel').classList.add('hidden');
 }
 
-function error(err) {
-    const error_msg = JSON.stringify(err);
-    document.getElementById('last_error').innerText = error_msg;
+function logEvent(event, isError = false) {
+    const event_msg = JSON.stringify(event);
+    if (isError) {
+        document.getElementById('last_error').innerText = event_msg;
+        document.getElementById('last_error').style.color = 'red';
+    }
+
     const li = document.createElement('li');
-    li.innerText = `${Date.now().toLocaleString()} ${error_msg}`;
-    document.getElementById('error_list').appendChild(li);
+    li.innerText = `${Date.now().toString()}: ${event_msg}`;
+    if (isError) {
+        li.style.color = 'red';
+    }
+    document.getElementById('event_list').appendChild(li);
+    isError ? console.error(li.innerText) : console.log(li.innerText);
 }
