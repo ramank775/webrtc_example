@@ -122,6 +122,7 @@
     <h2>Peer 2 Peer Communication with webrtc</h2>
     <div class="navbar">
         <a href="#" onclick="navigate('home');">Home</a>
+        <a href="#" class="right" onclick="toggleErrorList()">Event List</button>
         <a href="#" class="right" onclick="navigate('instruction')">Instruction</a>
     </div>
     <div class="home page">
@@ -143,7 +144,7 @@
                     <label for="connect_status">Connection Status:</label>
                     <span id="connection_status"> Disconnected </span> <br>
                     <span>Error: </span><span id="last_error"></span>
-                    <button onclick="toggleErrorList()">Event List</button>
+                    
                     <br>
                     <hr>
                     <label for="icecandidate">SDP Gathering State:<span id="ic_gathering_state"></span></label> <br>
