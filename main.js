@@ -24,7 +24,7 @@ rtcConnection.oniceconnectionstatechange = e => {
 
 rtcConnection.onconnectionstatechange = e => {
     logEvent(`Connection state changes to ${rtcConnection.connectionState.toString()}`);
-    document.getElementById("connection_status").innerText = `Connection ${rtcConnection.iceConnectionState.toString()}`;
+    document.getElementById("connection_status").innerText = rtcConnection.connectionState.toString();
 }
 
 rtcConnection.ondatachannel = e => {
